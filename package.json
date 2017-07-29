@@ -21,9 +21,22 @@
   ],
   "author": "Dolan Miu",
   "license": "MIT",
+  "bin": {
+    "ng-cli-electron": "dist/cli.js",
+    "nce": "dist/cli.js"
+  },
   "dependencies": {
+    "@types/node": "^8.0.17",
+    "@types/webpack": "^3.0.5",
+    "@types/webpack-merge": "0.0.5",
+    "awesome-typescript-loader": "^3.2.2",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^2.29.0",
     "rimraf": "^2.6.1",
-    "typescript": "^2.4.2"
+    "sass-loader": "^6.0.6",
+    "typescript": "^2.4.2",
+    "webpack": "^3.4.1",
+    "webpack-merge": "^4.1.0"
   },
   "devDependencies": {
     "tslint": "^5.5.0"
