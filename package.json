@@ -1,0 +1,31 @@
+{
+  "name": "ng-cli-electron",
+  "version": "1.0.0",
+  "description": "Build an electron project scaffolded in @angular/cli",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "npm run lint",
+    "build": "rimraf dist && tsc --p .",
+    "lint": "tslint --project .",
+    "postinstall": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dolanmiu/ng-cli-angular.git"
+  },
+  "keywords": [
+    "electron",
+    "angular",
+    "cli",
+    "webpack"
+  ],
+  "author": "Dolan Miu",
+  "license": "MIT",
+  "dependencies": {
+    "rimraf": "^2.6.1",
+    "typescript": "^2.4.2"
+  },
+  "devDependencies": {
+    "tslint": "^5.5.0"
+  }
+}
