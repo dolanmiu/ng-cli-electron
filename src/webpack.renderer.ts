@@ -1,8 +1,13 @@
 import * as CopyWebpackPlugin from "copy-webpack-plugin";
 import * as path from "path";
+import * as StringReplacePlugin from "string-replace-webpack-plugin";
 import * as webpack from "webpack";
 
 import { Helper } from "./helper";
+
+const scriptTags = `
+<script src="app.bundle.js"></script>
+`;
 
 const config: webpack.Configuration = {
     // for faster builds use 'eval'
@@ -67,7 +72,7 @@ const config: webpack.Configuration = {
             {
                 test: /\.html$/,
                 loader: "raw-loader",
-                exclude: [Helper.root("app/index.html")],
+                exclude: [Helper.root("src/index.html")],
             },
 
             // support for fonts
@@ -80,6 +85,19 @@ const config: webpack.Configuration = {
             {
                 test: /\.svg/,
                 loader: "svg-url-loader",
+            },
+            {
+                test: /index.html$/,
+                loader: StringReplacePlugin.replace({
+                    replacements: [
+                        {
+                            pattern: /<\/body>/ig,
+                            replacement: (match, p1, offset, str) => {
+                                return `${scriptTags}${match}`;
+                            },
+                        },
+                    ],
+                }),
             },
         ],
     },
@@ -102,7 +120,10 @@ const config: webpack.Configuration = {
         // Copies project static assets.
         //
         // See: https://www.npmjs.com/package/copy-webpack-plugin
-        new CopyWebpackPlugin([{ from: "src/assets", to: "assets" }]),
+        new CopyWebpackPlugin([
+            { from: "src/assets", to: "assets" },
+            { from: "src/index.html", to: "index.html" },
+        ]),
     ],
     // we need this due to problems with es6-shim
     node: {
