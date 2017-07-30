@@ -1,54 +1,120 @@
-// tslint:disable:only-arrow-functions
-import * as ExtractTextPlugin from "extract-text-webpack-plugin";
-import * as fs from "fs";
+import * as CopyWebpackPlugin from "copy-webpack-plugin";
+import * as path from "path";
 import * as webpack from "webpack";
-import * as webpackMerge from "webpack-merge";
 
 import { Helper } from "./helper";
-import * as commonConfig from "./webpack.common";
 
-const nodeModules = {};
-fs.readdirSync("node_modules")
-    // tslint:disable-next-line:typedef
-    .filter(function(x) {
-        return [".bin"].indexOf(x) === -1;
-    })
-    // tslint:disable-next-line:typedef
-    .forEach(function(mod) {
-        nodeModules[mod] = "commonjs " + mod;
-    });
-
-const ENV = process.env.NODE_ENV = process.env.ENV = "production";
-
-module.exports = webpackMerge(commonConfig, {
+const config: webpack.Configuration = {
+    // for faster builds use 'eval'
     devtool: "source-map",
+    // cache: false,
 
-    output: {
-        path: Helper.root("dench-dist"),
-        publicPath: "./",
-        filename: "[name].[hash].js",
-        chunkFilename: "[id].[hash].chunk.js",
+    entry: {
+        polyfills: Helper.root("src/polyfills.ts"),
+        app: Helper.root("src/main.ts"),
     },
 
-    externals: nodeModules,
+    // Config for our build files
+    output: {
+        path: Helper.root("dench-dist"),
+        filename: "[name].bundle.js",
+        sourceMapFilename: "[name].map",
+        chunkFilename: "[id].chunk.js",
+    },
+    /*
+    * Options affecting the resolving of modules.
+    *
+    * See: http://webpack.github.io/docs/configuration.html#resolve
+    */
+    resolve: {
+        /*
+         * An array of extensions that should be used to resolve modules.
+         *
+         * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
+         */
+        extensions: [".ts", ".js", ".json", ".css", ".scss", ".html"],
 
-    // htmlLoader: {
-    //     minimize: false, // workaround for ng2
-    // },
+        // An array of directory names to be resolved to the current directory
+        modules: [Helper.root("src"), "node_modules"],
 
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-        new webpack.optimize.DedupePlugin(),
-        /*new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
-          mangle: {
-            keep_fnames: true
-          }
-        }),*/
-        new ExtractTextPlugin("[name].[hash].scss"),
-        new webpack.DefinePlugin({
-            "process.env": {
-                ENV: JSON.stringify(ENV),
+    },
+    /*
+    * Options affecting the resolving of modules.
+    *
+    * See: http://webpack.github.io/docs/configuration.html#resolve
+    */
+    module: {
+        rules: [
+            // Support for .ts files.
+            {
+                test: /\.ts$/,
+                loaders: ["awesome-typescript-loader", "angular2-template-loader"],
+                exclude: [/\.(spec|e2e)\.ts$/],
             },
-        }),
+
+            // Support for *.json files.
+            {
+                test: /\.json$/,
+                loader: "json-loader",
+            },
+            {
+                test: /\.scss$/,
+                exclude: /node_modules/,
+                loaders: ["raw-loader", "sass-loader"], // sass-loader not scss-loader
+            },
+
+            // support for .html antd .css as raw text
+            {
+                test: /\.html$/,
+                loader: "raw-loader",
+                exclude: [Helper.root("app/index.html")],
+            },
+
+            // support for fonts
+            {
+                test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+                loader: "file-loader?name=dist/[name]-[hash].[ext]",
+            },
+
+            // support for svg icons
+            {
+                test: /\.svg/,
+                loader: "svg-url-loader",
+            },
+        ],
+    },
+    plugins: [
+        new webpack.ContextReplacementPlugin(
+            /angular(\\|\/)core(\\|\/)@angular/,
+            Helper.root("src"),
+            {},
+        ),
+        // Plugin: CommonsChunkPlugin
+        // Description: Shares common code between the pages.
+        // It identifies common modules and put them into a commons chunk.
+        //
+        // See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
+        // See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
+        new webpack.optimize.CommonsChunkPlugin({ names: ["vendor", "polyfills"], minChunks: Infinity }),
+        // Plugin: CopyWebpackPlugin
+        // Description: Copy files and directories in webpack.
+        //
+        // Copies project static assets.
+        //
+        // See: https://www.npmjs.com/package/copy-webpack-plugin
+        new CopyWebpackPlugin([{ from: "src/assets", to: "assets" }]),
     ],
-});
+    // we need this due to problems with es6-shim
+    node: {
+        global: true,
+        progress: false,
+        crypto: "empty",
+        module: false,
+        clearImmediate: false,
+        setImmediate: false,
+    },
+
+    target: "electron-renderer",
+};
+
+module.exports = config;
