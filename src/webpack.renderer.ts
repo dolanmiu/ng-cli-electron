@@ -123,6 +123,9 @@ const config: webpack.Configuration = {
         new CopyWebpackPlugin([
             { from: "src/assets", to: "assets" },
             { from: "src/index.html", to: "index.html" },
+            { from: "node_modules/ng-cli-electron/src/main/main.js", to: "main.js" },
+            { from: "package.json", to: "package.json" },
+
         ]),
     ],
     // we need this due to problems with es6-shim
