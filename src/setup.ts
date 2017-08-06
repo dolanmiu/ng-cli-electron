@@ -1,20 +1,21 @@
 import * as fs from "fs-extra";
 
-const PACKAGE_NAME = "ng-cli-electron";
-const WORKING_DIR = `./node_modules/${PACKAGE_NAME}/dist/working-dir`;
-
 export class SetUp {
+
+    constructor(private workingDir: string) {
+
+    }
 
     public setup(): void {
         this.copyProject();
 
-        fs.symlinkSync("../../../Git-Proton/node_modules", `${WORKING_DIR}/node_modules`, "dir");
+        fs.symlinkSync("../../../Git-Proton/node_modules", `${this.workingDir}/node_modules`, "dir");
 
         this.packageClenser();
     }
 
     public addElectronToWebpack(): void {
-        const path = `${WORKING_DIR}/webpack.config.js`;
+        const path = `${this.workingDir}/webpack.config.js`;
 
         try {
             const regex = /module.exports = ({)/ig;
@@ -29,7 +30,7 @@ export class SetUp {
 
     private copyProject(): void {
         try {
-            fs.copySync("./", WORKING_DIR, {
+            fs.copySync("./", this.workingDir, {
                 filter: (path) => {
                     const isInNodeModule = path.indexOf("node_modules") > -1;
                     const isInGit = path.indexOf(".git") > -1;
@@ -42,7 +43,7 @@ export class SetUp {
     }
 
     private packageClenser(): void {
-        const path = `${WORKING_DIR}/package.json`;
+        const path = `${this.workingDir}/package.json`;
 
         try {
             const packageJson = JSON.parse(fs.readFileSync(path, "utf8"));
