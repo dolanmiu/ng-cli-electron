@@ -20,4 +20,5 @@ angularCli.build();
 
 setup.addMainFileToDist();
 setup.addElectronBaseHref();
+// Perhaps delete old dist
 setup.exportDist();
