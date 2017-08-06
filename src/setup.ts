@@ -1,15 +1,36 @@
 import * as fs from "fs-extra";
 
 const PACKAGE_NAME = "ng-cli-electron";
+const WORKING_DIR = `./node_modules/${PACKAGE_NAME}/dist/working-dir`;
 
 export class SetUp {
 
     public setup(): void {
-        console.log("Copying files to working directory");
+        this.copyProject();
+
+        fs.symlinkSync("../../../Git-Proton/node_modules", `${WORKING_DIR}/node_modules`, "dir");
+
+        this.packageClenser();
+    }
+
+    public addElectronToWebpack(): void {
+        const path = `${WORKING_DIR}/webpack.config.js`;
+
         try {
-            fs.copySync("./", "./node_modules/ng-cli-electron/dist/working-dir", {
+            const regex = /module.exports = ({)/ig;
+            const webpackConfig = fs.readFileSync(path, "utf8");
+
+            webpackConfig.replace(regex, `{ "target": electron-renderer",`);
+            fs.writeFileSync(path, webpackConfig);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    private copyProject(): void {
+        try {
+            fs.copySync("./", WORKING_DIR, {
                 filter: (path) => {
-                    console.log(path);
                     const isInNodeModule = path.indexOf("node_modules") > -1;
                     const isInGit = path.indexOf(".git") > -1;
                     return !isInNodeModule;
@@ -18,35 +39,11 @@ export class SetUp {
         } catch (err) {
             console.error(err);
         }
-
-        fs.symlinkSync("../../../Git-Proton/node_modules", "./node_modules/ng-cli-electron/dist/working-dir/node_modules", "dir");
-
-        this.packageClenser("./node_modules/ng-cli-electron/dist/working-dir/package.json");
     }
 
-    public addElectronToWebpack(): void {
-        const path = "./node_modules/ng-cli-electron/dist/working-dir/webpack.config.js";
-        try {
-            const regex = /module.exports = ({(?:.|[\r\n])*})/ig;
-            const webpackConfig = fs.readFileSync(path, "utf8");
-            const moduleExportsMatches = regex.exec(webpackConfig);
+    private packageClenser(): void {
+        const path = `${WORKING_DIR}/package.json`;
 
-            if (moduleExportsMatches === null) {
-                throw new Error("Invalid webpack file");
-            }
-            console.log(moduleExportsMatches.length);
-            console.log(moduleExportsMatches[1]);
-            const moduleExports = JSON.parse(moduleExportsMatches[1]);
-            moduleExports.target = "electron-renderer";
-
-            webpackConfig.replace(regex, JSON.stringify(moduleExports));
-            fs.writeFileSync(path, JSON.stringify(webpackConfig));
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    private packageClenser(path: string): void {
         try {
             const packageJson = JSON.parse(fs.readFileSync(path, "utf8"));
             packageJson.scripts = {};
