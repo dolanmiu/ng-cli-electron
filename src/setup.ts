@@ -29,12 +29,12 @@ export class SetUp {
         try {
             const regex = /module.exports = ({(?:.|[\r\n])*})/ig;
             const webpackConfig = fs.readFileSync(path, "utf8");
-            const moduleExportsMatches = webpackConfig.match(regex);
+            const moduleExportsMatches = regex.exec(webpackConfig);
 
             if (moduleExportsMatches === null) {
                 throw new Error("Invalid webpack file");
             }
-            console.log(moduleExportsMatches);
+            console.log(moduleExportsMatches.length);
             console.log(moduleExportsMatches[1]);
             const moduleExports = JSON.parse(moduleExportsMatches[1]);
             moduleExports.target = "electron-renderer";
