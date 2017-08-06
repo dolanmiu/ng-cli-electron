@@ -1,4 +1,5 @@
 import * as fs from "fs-extra";
+import * as path from "path";
 
 export class SetUp {
 
@@ -15,25 +16,51 @@ export class SetUp {
     }
 
     public addElectronToWebpack(): void {
-        const path = `${this.workingDir}/webpack.config.js`;
+        const webpackPath = `${this.workingDir}/webpack.config.js`;
 
         try {
             const regex = /module.exports = ({)/ig;
-            const webpackConfig = fs.readFileSync(path, "utf8");
+            const webpackConfig = fs.readFileSync(webpackPath, "utf8");
 
             webpackConfig.replace(regex, `{ "target": electron-renderer",`);
-            fs.writeFileSync(path, webpackConfig);
+            fs.writeFileSync(webpackPath, webpackConfig);
         } catch (err) {
             console.error(err);
         }
     }
 
-    private copyProject(): void {
+    public addElectronBaseHref(): void {
+        const htmlPath = `${this.workingDir}/dist/index.html`;
+
         try {
-            fs.copySync("./", this.workingDir, {
-                filter: (path) => {
-                    const isInNodeModule = path.indexOf("node_modules") > -1;
-                    const isInGit = path.indexOf(".git") > -1;
+            const regex = /<base href=".\/">/ig;
+            const webpackConfig = fs.readFileSync(htmlPath, "utf8");
+
+            webpackConfig.replace(regex, `<base href=".">`);
+            fs.writeFileSync(htmlPath, webpackConfig);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    public addMainFileToDist(): void {
+        fs.copySync(path.resolve(__dirname, "./assets/main.js"), `${this.workingDir}/dist/main.js`);
+    }
+
+    public exportDist(): void {
+        this.copyFolder(`${this.workingDir}/dist`, "./dist");
+    }
+
+    private copyProject(): void {
+        this.copyFolder("./", this.workingDir);
+    }
+
+    private copyFolder(src: string, dest: string): void {
+        try {
+            fs.copySync(src, dest, {
+                filter: (filePath) => {
+                    const isInNodeModule = filePath.indexOf("node_modules") > -1;
+                    const isInGit = filePath.indexOf(".git") > -1;
                     return !isInNodeModule;
                 },
             });
@@ -43,12 +70,12 @@ export class SetUp {
     }
 
     private packageClenser(): void {
-        const path = `${this.workingDir}/package.json`;
+        const packagePath = `${this.workingDir}/package.json`;
 
         try {
-            const packageJson = JSON.parse(fs.readFileSync(path, "utf8"));
+            const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf8"));
             packageJson.scripts = {};
-            fs.writeFileSync(path, JSON.stringify(packageJson));
+            fs.writeFileSync(packagePath, JSON.stringify(packageJson));
         } catch (err) {
             console.error(err);
         }
