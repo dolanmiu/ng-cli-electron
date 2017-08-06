@@ -7,7 +7,9 @@ import { SetUp } from "./setup";
 const setup = new SetUp();
 setup.setup();
 
-const ejector = new AngularCLI();
-ejector.eject();
+const angularCli = new AngularCLI();
+angularCli.eject();
 
 setup.addElectronToWebpack();
+
+angularCli.build();
