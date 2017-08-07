@@ -1,9 +1,24 @@
 #! /usr/bin/env node
 import * as shell from "shelljs";
-import * as webpack from "webpack";
-import * as config from "./webpack.renderer";
 
-// webpack(config).run((err, stats) => {
-//     console.log(stats);
-// });
-shell.exec("webpack --config node_modules/ng-cli-electron/dist/webpack.renderer.js --progress --profile --bail --display-error-details");
+import { AngularCLI } from "./angular-cli";
+import { SetUp } from "./setup";
+
+const PACKAGE_NAME = "ng-cli-electron";
+const WORKING_DIR = `./node_modules/${PACKAGE_NAME}/dist/working-dir`;
+
+const setup = new SetUp(WORKING_DIR);
+const angularCli = new AngularCLI(WORKING_DIR);
+
+setup.setup();
+
+angularCli.eject();
+
+setup.addElectronToWebpack();
+
+angularCli.build();
+
+setup.addMainFileToDist();
+setup.addElectronBaseHref();
+// Perhaps delete old dist
+setup.exportDist();
