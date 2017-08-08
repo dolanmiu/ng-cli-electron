@@ -11,7 +11,7 @@ export class SetUp {
     public setup(): void {
         this.copyProject();
 
-        fs.symlinkSync("../../../Git-Proton/node_modules", `${this.workingDir}/node_modules`, "dir");
+        fs.symlinkSync("../../../", `${this.workingDir}/node_modules`, "dir");
 
         this.packageClenser();
     }
