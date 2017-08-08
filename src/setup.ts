@@ -5,84 +5,49 @@ import * as rimraf from "rimraf";
 export class SetUp {
 
     constructor(private workingDir: string) {
-
-    }
-
-    public setup(): void {
-        this.copyProject();
-
-        fs.symlinkSync("../../../", `${this.workingDir}/node_modules`, "dir");
-
-        this.packageClenser();
     }
 
     public addElectronToWebpack(): void {
         const webpackPath = `${this.workingDir}/webpack.config.js`;
+        const regex = /module.exports = {/ig;
 
-        try {
-            const regex = /module.exports = {/ig;
-            let webpackConfig = fs.readFileSync(webpackPath, "utf8");
+        let webpackConfig = fs.readFileSync(webpackPath, "utf8");
 
-            webpackConfig = webpackConfig.replace(regex, `module.exports = { "target": "electron-renderer",`);
-            fs.writeFileSync(webpackPath, webpackConfig);
-        } catch (err) {
-            console.error(err);
-        }
+        webpackConfig = webpackConfig.replace(regex, `module.exports = { "target": "electron-renderer",`);
+        fs.writeFileSync(webpackPath, webpackConfig);
     }
 
     public addElectronBaseHref(): void {
         const htmlPath = `${this.workingDir}/dist/index.html`;
+        const regex = /<base href=".">/ig;
 
-        try {
-            const regex = /<base href=".">/ig;
-            let indexHtml = fs.readFileSync(htmlPath, "utf8");
+        let indexHtml = fs.readFileSync(htmlPath, "utf8");
 
-            indexHtml = indexHtml.replace(regex, `<base href=".\/">`);
-            fs.writeFileSync(htmlPath, indexHtml);
-        } catch (err) {
-            console.error(err);
-        }
+        indexHtml = indexHtml.replace(regex, `<base href=".\/">`);
+        fs.writeFileSync(htmlPath, indexHtml);
     }
 
     public addMainFileToDist(): void {
         fs.copySync(path.resolve(__dirname, "../src/assets/main.js"), `${this.workingDir}/dist/main.js`);
     }
 
-    public exportDist(): void {
-        this.copyFolder(`${this.workingDir}/dist`, "./dist");
+    public copyPackageJson(): void {
+        fs.copySync(`${this.workingDir}/package.json`, `${this.workingDir}/dist/package.json`);
     }
 
-    public clearWorkingDirectory(): void {
-        rimraf.sync(this.workingDir);
+    public clearDist(): void {
+        rimraf.sync(`${this.workingDir}/dist`);
     }
 
-    private copyProject(): void {
-        this.copyFolder("./", this.workingDir);
+    public delete(file: string): void {
+        rimraf.sync(`${this.workingDir}/${file}`);
     }
 
-    private copyFolder(src: string, dest: string): void {
-        try {
-            fs.copySync(src, dest, {
-                filter: (filePath) => {
-                    const isInNodeModule = filePath.indexOf("node_modules") > -1;
-                    const isInGit = filePath.indexOf(".git") > -1;
-                    return !isInNodeModule;
-                },
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    private packageClenser(): void {
+    public packageClenser(): void {
         const packagePath = `${this.workingDir}/package.json`;
 
-        try {
-            const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf8"));
-            packageJson.scripts = {};
-            fs.writeFileSync(packagePath, JSON.stringify(packageJson));
-        } catch (err) {
-            console.error(err);
-        }
+        const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf8"));
+        packageJson.scripts = {};
+        fs.writeFileSync(packagePath, JSON.stringify(packageJson));
     }
 }

@@ -12,8 +12,4 @@ export class AngularCLI {
     public build(): void {
         shell.exec(`cd ${this.workingDir} && npm run build`);
     }
-
-    public install(): void {
-        shell.exec(`cd ${this.workingDir} && npm install`);
-    }
 }

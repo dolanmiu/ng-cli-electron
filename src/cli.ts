@@ -2,31 +2,50 @@
 import * as shell from "shelljs";
 
 import { AngularCLI } from "./angular-cli";
+import { Backuper } from "./backuper";
 import { SetUp } from "./setup";
 
 const PACKAGE_NAME = "ng-cli-electron";
-const WORKING_DIR = `./node_modules/${PACKAGE_NAME}/dist/working-dir`;
+const WORKING_DIR = `./`;
 
 const setup = new SetUp(WORKING_DIR);
 const angularCli = new AngularCLI(WORKING_DIR);
+const backuper = new Backuper();
 
-console.log("Clearing working directory...");
-setup.clearWorkingDirectory();
-console.log("Copying files...");
-setup.setup();
-// console.log("Installing...");
-// angularCli.install();
-console.log("Ejecting...");
-angularCli.eject();
-console.log("Add webpack to electron...");
-setup.addElectronToWebpack();
-// console.log("Building...");
-// angularCli.build();
-console.log("Adding election main file...");
-setup.addMainFileToDist();
-// console.log("Changing index base href...");
-// setup.addElectronBaseHref();
-// console.log("Clearing out old dist folder...");
-// // Perhaps delete old dist
-// console.log("Copying in new dist folder...");
-// setup.exportDist();
+console.log("Do NOT cancel this task");
+console.log("Backing up files...");
+backuper.backup("package", `${WORKING_DIR}/package.json`);
+backuper.backup("angular-cli", `${WORKING_DIR}/.angular-cli.json`);
+
+try {
+    console.log("Cleanse package.json");
+    setup.packageClenser();
+
+    console.log("Ejecting...");
+    angularCli.eject();
+
+    console.log("Add webpack to electron...");
+    setup.addElectronToWebpack();
+
+    console.log("Clearing out old dist folder...");
+    setup.clearDist();
+
+    console.log("Building...");
+    angularCli.build();
+
+    console.log("Adding election main file...");
+    setup.addMainFileToDist();
+
+    console.log("Changing index base href...");
+    setup.addElectronBaseHref();
+
+    console.log("Copying package.json");
+    setup.copyPackageJson();
+} finally {
+    console.log("Delete webpack config");
+    setup.delete("webpack.config.js");
+
+    console.log("Restoring files...");
+    backuper.restore("package");
+    backuper.restore("angular-cli");
+}
