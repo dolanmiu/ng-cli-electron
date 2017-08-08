@@ -28,6 +28,7 @@
   "dependencies": {
     "@types/fs-extra": "^4.0.0",
     "@types/node": "^8.0.17",
+    "@types/rimraf": "0.0.28",
     "@types/webpack": "^3.0.5",
     "@types/webpack-merge": "0.0.5",
     "angular2-template-loader": "^0.6.2",

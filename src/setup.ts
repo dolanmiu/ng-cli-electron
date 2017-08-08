@@ -1,5 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
+import * as rimraf from "rimraf";
 
 export class SetUp {
 
@@ -19,10 +20,10 @@ export class SetUp {
         const webpackPath = `${this.workingDir}/webpack.config.js`;
 
         try {
-            const regex = /module.exports = ({)/ig;
-            const webpackConfig = fs.readFileSync(webpackPath, "utf8");
+            const regex = /module.exports = {/ig;
+            let webpackConfig = fs.readFileSync(webpackPath, "utf8");
 
-            webpackConfig.replace(regex, `{ "target": electron-renderer",`);
+            webpackConfig = webpackConfig.replace(regex, `module.exports = { "target": "electron-renderer",`);
             fs.writeFileSync(webpackPath, webpackConfig);
         } catch (err) {
             console.error(err);
@@ -33,22 +34,26 @@ export class SetUp {
         const htmlPath = `${this.workingDir}/dist/index.html`;
 
         try {
-            const regex = /<base href=".\/">/ig;
-            const webpackConfig = fs.readFileSync(htmlPath, "utf8");
+            const regex = /<base href=".">/ig;
+            let indexHtml = fs.readFileSync(htmlPath, "utf8");
 
-            webpackConfig.replace(regex, `<base href=".">`);
-            fs.writeFileSync(htmlPath, webpackConfig);
+            indexHtml = indexHtml.replace(regex, `<base href=".\/">`);
+            fs.writeFileSync(htmlPath, indexHtml);
         } catch (err) {
             console.error(err);
         }
     }
 
     public addMainFileToDist(): void {
-        fs.copySync(path.resolve(__dirname, "./assets/main.js"), `${this.workingDir}/dist/main.js`);
+        fs.copySync(path.resolve(__dirname, "../src/assets/main.js"), `${this.workingDir}/dist/main.js`);
     }
 
     public exportDist(): void {
         this.copyFolder(`${this.workingDir}/dist`, "./dist");
+    }
+
+    public clearWorkingDirectory(): void {
+        rimraf.sync(this.workingDir);
     }
 
     private copyProject(): void {

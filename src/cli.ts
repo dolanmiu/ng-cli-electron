@@ -10,15 +10,22 @@ const WORKING_DIR = `./node_modules/${PACKAGE_NAME}/dist/working-dir`;
 const setup = new SetUp(WORKING_DIR);
 const angularCli = new AngularCLI(WORKING_DIR);
 
+setup.clearWorkingDirectory();
+
 setup.setup();
 
 angularCli.eject();
+
+angularCli.install();
 
 setup.addElectronToWebpack();
 
 angularCli.build();
 
 setup.addMainFileToDist();
+
 setup.addElectronBaseHref();
+
 // Perhaps delete old dist
+
 setup.exportDist();
