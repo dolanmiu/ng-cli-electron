@@ -7,7 +7,7 @@
     "test": "npm run lint",
     "build": "rimraf dist && tsc --p .",
     "lint": "tslint --project .",
-    "postinstall": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
