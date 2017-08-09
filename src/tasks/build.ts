@@ -38,9 +38,6 @@ export class BuildTask {
             console.log("Adding election main file...");
             setup.addMainFileToDist();
 
-            console.log("Changing index base href...");
-            setup.addElectronBaseHref();
-
             console.log("Copying package.json");
             setup.copyPackageJson();
         } finally {

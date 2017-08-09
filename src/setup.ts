@@ -17,16 +17,6 @@ export class SetUp {
         fs.writeFileSync(webpackPath, webpackConfig);
     }
 
-    public addElectronBaseHref(): void {
-        const htmlPath = `${this.workingDir}/dist/index.html`;
-        const regex = /<base href=".">/ig;
-
-        let indexHtml = fs.readFileSync(htmlPath, "utf8");
-
-        indexHtml = indexHtml.replace(regex, `<base href=".\/">`);
-        fs.writeFileSync(htmlPath, indexHtml);
-    }
-
     public addMainFileToDist(): void {
         fs.copySync(path.resolve(__dirname, "../src/assets/main.js"), `${this.workingDir}/dist/main.js`);
     }
