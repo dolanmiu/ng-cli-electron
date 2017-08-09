@@ -1,3 +1,5 @@
+[![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Known Vulnerabilities][snky-image]][snky-url]
+
 # ng-cli-electron
 
 > Build an electron project scaffolded in `@angular/cli`
@@ -29,3 +31,14 @@ Add the following in your `scripts` section inside `package.json`:
 ```
 "serve-electron": "nge serve"
 ```
+
+-----
+
+Made with 💖 by Dolan
+
+[travis-image]: https://travis-ci.org/dolanmiu/ng-cli-electron.svg?branch=master
+[travis-url]: https://travis-ci.org/dolanmiu/ng-cli-electron
+[daviddm-image]: https://david-dm.org/dolanmiu/ng-cli-electron.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/dolanmiu/ng-cli-electron
+[snky-image]: https://snyk.io/test/github/dolanmiu/ng-cli-electron/badge.svg
+[snky-url]: https://snyk.io/test/github/dolanmiu/ng-cli-electron
