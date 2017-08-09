@@ -23,7 +23,7 @@
   "license": "MIT",
   "bin": {
     "ng-cli-electron": "dist/cli.js",
-    "nce": "dist/cli.js"
+    "nge": "dist/cli.js"
   },
   "dependencies": {
     "@types/fs-extra": "^4.0.0",

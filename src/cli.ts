@@ -1,51 +1,19 @@
 #! /usr/bin/env node
 import * as shell from "shelljs";
 
-import { AngularCLI } from "./angular-cli";
-import { Backuper } from "./backuper";
-import { SetUp } from "./setup";
+import { BuildTask } from "./tasks/build";
 
-const PACKAGE_NAME = "ng-cli-electron";
-const WORKING_DIR = `./`;
+const command = process.argv[2];
 
-const setup = new SetUp(WORKING_DIR);
-const angularCli = new AngularCLI(WORKING_DIR);
-const backuper = new Backuper();
+if (command === undefined) {
+    console.log("nge build - Builds your app and places it into the output path (dist/ by default).");
+    process.exit();
+}
 
-console.log("Do NOT cancel this task");
-console.log("Backing up files...");
-backuper.backup("package", `${WORKING_DIR}/package.json`);
-backuper.backup("angular-cli", `${WORKING_DIR}/.angular-cli.json`);
-
-try {
-    console.log("Cleanse package.json");
-    setup.packageClenser();
-
-    console.log("Ejecting...");
-    angularCli.eject();
-
-    console.log("Add webpack to electron...");
-    setup.addElectronToWebpack();
-
-    console.log("Clearing out old dist folder...");
-    setup.clearDist();
-
-    console.log("Building...");
-    angularCli.build();
-
-    console.log("Adding election main file...");
-    setup.addMainFileToDist();
-
-    console.log("Changing index base href...");
-    setup.addElectronBaseHref();
-
-    console.log("Copying package.json");
-    setup.copyPackageJson();
-} finally {
-    console.log("Delete webpack config");
-    setup.delete("webpack.config.js");
-
-    console.log("Restoring files...");
-    backuper.restore("package");
-    backuper.restore("angular-cli");
+switch (command) {
+    case "build":
+        BuildTask.build();
+        break;
+    default:
+        console.log(`Command: ${command} is not valid`);
 }
