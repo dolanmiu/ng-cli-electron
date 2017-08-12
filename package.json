@@ -39,6 +39,7 @@
   },
   "peerDependencies": {
     "@angular/cli": "^1.0.0",
-    "electron": "^1.6.11"
+    "electron": "^1.6.11",
+    "awesome-typescript-loader": "^3.2.2"
   }
 }

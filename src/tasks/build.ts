@@ -36,13 +36,19 @@ export class BuildTask {
             angularCli.build();
 
             console.log("Adding election main file...");
-            setup.addMainFileToDist();
+            if (setup.checkIfMainExists()) {
+                setup.addMainWebpackToDist();
+                angularCli.buildMain();
+            } else {
+                setup.addMainFileToDist();
+            }
 
             console.log("Copying package.json");
             setup.copyPackageJson();
         } finally {
             console.log("Delete webpack config");
             setup.delete("webpack.config.js");
+            setup.delete("webpack-main.config.js");
 
             console.log("Restoring files...");
             backuper.restore("package");
