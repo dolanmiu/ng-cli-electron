@@ -37,9 +37,11 @@ export class BuildTask {
 
             console.log("Adding election main file...");
             if (setup.checkIfMainExists()) {
+                console.log("Custom 'main' exists, building it...");
                 setup.addMainWebpackToDist();
                 angularCli.buildMain();
             } else {
+                console.log("No 'main' found. Using default...");
                 setup.addMainFileToDist();
             }
 
