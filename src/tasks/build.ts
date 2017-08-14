@@ -38,8 +38,11 @@ export class BuildTask {
             console.log("Adding election main file...");
             setup.addMainFileToDist();
 
-            console.log("Copying package.json");
+            console.log("Copying package.json...");
             setup.copyPackageJson();
+
+            console.log("Adding main to package.json...");
+            setup.packageDistAddMain();
         } finally {
             console.log("Delete webpack config");
             setup.delete("webpack.config.js");

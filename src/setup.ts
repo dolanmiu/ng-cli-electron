@@ -40,4 +40,12 @@ export class SetUp {
         packageJson.scripts = {};
         fs.writeFileSync(packagePath, JSON.stringify(packageJson));
     }
+
+    public packageDistAddMain(): void {
+        const packagePath = `${this.workingDir}/dist/package.json`;
+
+        const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf8"));
+        packageJson.main = "main.js";
+        fs.writeFileSync(packagePath, JSON.stringify(packageJson));
+    }
 }
