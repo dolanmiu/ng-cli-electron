@@ -11,7 +11,7 @@ This is an extention/plugin which allows `@angular/cli` users to create electron
 ## Install
 
 ```sh
-$ npm install ng-cli-electron
+$ npm install ng-cli-electron electron --save
 ```
 
 ## Usage

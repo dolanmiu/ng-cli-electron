@@ -36,7 +36,14 @@ export class BuildTask {
             angularCli.build();
 
             console.log("Adding election main file...");
-            setup.addMainFileToDist();
+            if (setup.checkIfMainExists()) {
+                console.log("Custom 'main' exists, building it...");
+                setup.addMainWebpackToDist();
+                angularCli.buildMain();
+            } else {
+                console.log("No 'main' found. Using default...");
+                setup.addMainFileToDist();
+            }
 
             console.log("Copying package.json...");
             setup.copyPackageJson();
@@ -46,6 +53,7 @@ export class BuildTask {
         } finally {
             console.log("Delete webpack config");
             setup.delete("webpack.config.js");
+            setup.delete("webpack-main.config.js");
 
             console.log("Restoring files...");
             backuper.restore("package");

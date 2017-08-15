@@ -48,4 +48,16 @@ export class SetUp {
         packageJson.main = "main.js";
         fs.writeFileSync(packagePath, JSON.stringify(packageJson));
     }
+
+    public checkIfMainExists(): boolean {
+        if (fs.existsSync(`${this.workingDir}/main/index.ts`)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public addMainWebpackToDist(): void {
+        fs.copySync(path.resolve(__dirname, "../src/assets/webpack-main.config.js"), `${this.workingDir}/webpack-main.config.js`);
+    }
 }
