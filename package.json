@@ -1,6 +1,6 @@
 {
   "name": "ng-cli-electron",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Build an electron project scaffolded in @angular/cli",
   "main": "dist/index.js",
   "scripts": {
