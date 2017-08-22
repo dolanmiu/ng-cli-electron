@@ -5,6 +5,11 @@ import { BuildTask } from "./tasks/build";
 import { ServeTask } from "./tasks/serve";
 
 const command = process.argv[2];
+process.argv.splice(0, 3);
+
+const flags = process.argv.map((flag) => {
+    return flag.replace("--", "");
+});
 
 if (command === undefined) {
     console.log("nge build - Builds your app and places it into the output path (dist/ by default).");
@@ -13,6 +18,10 @@ if (command === undefined) {
 
 switch (command) {
     case "build":
+        if (flags[0] === "main") {
+            BuildTask.buildMain();
+            break;
+        }
         BuildTask.build();
         break;
     case "serve":

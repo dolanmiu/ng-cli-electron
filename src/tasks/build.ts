@@ -2,16 +2,12 @@ import { AngularCLI } from "../angular-cli";
 import { Backuper } from "../backuper";
 import { SetUp } from "../setup";
 
+const PACKAGE_NAME = "ng-cli-electron";
+const WORKING_DIR = `./`;
+
 export class BuildTask {
-
     public static build(): void {
-        const PACKAGE_NAME = "ng-cli-electron";
-        const WORKING_DIR = `./`;
-
-        const setup = new SetUp(WORKING_DIR);
-        const angularCli = new AngularCLI(WORKING_DIR);
         const backuper = new Backuper();
-        const command = process.argv[2];
 
         console.log("Do NOT cancel this task");
         console.log("Backing up files...");
@@ -21,43 +17,55 @@ export class BuildTask {
         try {
 
             console.log("Cleanse package.json");
-            setup.packageClenser();
+            this.setup.packageClenser();
 
             console.log("Ejecting...");
-            angularCli.eject();
+            this.angularCli.eject();
 
             console.log("Add webpack to electron...");
-            setup.addElectronToWebpack();
+            this.setup.addElectronToWebpack();
 
             console.log("Clearing out old dist folder...");
-            setup.clearDist();
+            this.setup.clearDist();
 
             console.log("Building...");
-            angularCli.build();
+            this.angularCli.build();
 
-            console.log("Adding election main file...");
-            if (setup.checkIfMainExists()) {
-                console.log("Custom 'main' exists, building it...");
-                setup.addMainWebpackToDist();
-                angularCli.buildMain();
-            } else {
-                console.log("No 'main' found. Using default...");
-                setup.addMainFileToDist();
-            }
+            this.buildMain();
 
             console.log("Copying package.json...");
-            setup.copyPackageJson();
+            this.setup.copyPackageJson();
 
             console.log("Adding main to package.json...");
-            setup.packageDistAddMain();
+            this.setup.packageDistAddMain();
         } finally {
             console.log("Delete webpack config");
-            setup.delete("webpack.config.js");
-            setup.delete("webpack-main.config.js");
+            this.setup.delete("webpack.config.js");
 
             console.log("Restoring files...");
             backuper.restore("package");
             backuper.restore("angular-cli");
         }
     }
+
+    public static buildMain(): void {
+        console.log("Adding election main file...");
+
+        try {
+            if (this.setup.checkIfMainExists()) {
+                console.log("Custom 'main' exists, building it...");
+                this.setup.addMainWebpackToDist();
+                this.angularCli.buildMain();
+            } else {
+                console.log("No 'main' found. Using default...");
+                this.setup.addMainFileToDist();
+            }
+        } finally {
+            console.log("Delete main webpack config");
+            this.setup.delete("webpack-main.config.js");
+        }
+    }
+
+    private static setup = new SetUp(WORKING_DIR);
+    private static angularCli = new AngularCLI(WORKING_DIR);
 }
