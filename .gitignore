@@ -42,3 +42,7 @@ dist
 
 # VSCode
 .vscode
+
+[core]
+    symlinks = false
+    autocrlf = false
