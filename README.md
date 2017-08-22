@@ -25,6 +25,12 @@ Add the following in your `scripts` section inside `package.json`:
 "build-electron": "nge build"
 ```
 
+If you **only** want to build the `main` part of Electron:
+
+```
+"build-electron-main": "nge build --main"
+```
+
 ### Serve
 Add the following in your `scripts` section inside `package.json`:
 
