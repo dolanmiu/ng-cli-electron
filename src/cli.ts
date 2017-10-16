@@ -1,32 +1,28 @@
 #! /usr/bin/env node
 import * as shell from "shelljs";
+import * as Yargs from "yargs";
 
 import { BuildTask } from "./tasks/build";
 import { ServeTask } from "./tasks/serve";
 
-const command = process.argv[2];
-process.argv.splice(0, 3);
-
-const flags = process.argv.map((flag) => {
-    return flag.replace("--", "");
-});
-
-if (command === undefined) {
-    console.log("nge build - Builds your app and places it into the output path (dist/ by default).");
-    process.exit();
-}
-
-switch (command) {
-    case "build":
-        if (flags[0] === "main") {
+const serveCommand = Yargs.command({
+    command: "serve",
+    describe: "Serve the app in Electron window",
+    handler: (argv) => {
+        ServeTask.serve();
+    },
+}).command({
+    command: "build",
+    describe: "Build the app",
+    handler: (argv) => {
+        if (argv.main === true) {
             BuildTask.buildMain();
-            break;
+            return;
         }
         BuildTask.build();
-        break;
-    case "serve":
-        ServeTask.serve();
-        break;
-    default:
-        console.log(`Command: ${command} is not valid`);
-}
+    },
+}).option("main", {
+    alias: "m",
+    default: false,
+    describe: "Build the 'main' part of Electron only",
+}).argv;

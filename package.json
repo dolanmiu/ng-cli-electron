@@ -29,10 +29,12 @@
     "@types/fs-extra": "^4.0.0",
     "@types/node": "^8.0.17",
     "@types/rimraf": "0.0.28",
+    "@types/yargs": "^8.0.2",
     "fs-extra": "^4.0.1",
     "rimraf": "^2.6.1",
     "shelljs": "^0.7.8",
-    "typescript": "^2.4.2"
+    "typescript": "^2.4.2",
+    "yargs": "^9.0.1"
   },
   "devDependencies": {
     "tslint": "^5.5.0"
