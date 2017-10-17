@@ -27,10 +27,12 @@
   },
   "dependencies": {
     "@types/fs-extra": "^4.0.0",
+    "@types/lodash": "^4.14.77",
     "@types/node": "^8.0.17",
     "@types/rimraf": "0.0.28",
     "@types/yargs": "^8.0.2",
     "fs-extra": "^4.0.1",
+    "lodash": "^4.17.4",
     "rimraf": "^2.6.1",
     "shelljs": "^0.7.8",
     "typescript": "^2.4.2",
