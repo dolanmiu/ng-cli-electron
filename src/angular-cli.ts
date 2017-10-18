@@ -6,7 +6,12 @@ export class AngularCLI {
     }
 
     public eject(ngCliArgs: string[]): void {
-        shell.exec(`cd ${this.workingDir} && ng eject --base-href .`);
+        const ejectCommand = [`cd ${this.workingDir} && ng eject --base-href .`];
+        const fullCommand = ejectCommand.concat(ngCliArgs).join(" ");
+
+        console.log(fullCommand);
+
+        shell.exec(fullCommand);
     }
 
     public build(): void {

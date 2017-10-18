@@ -6,7 +6,7 @@ const PACKAGE_NAME = "ng-cli-electron";
 const WORKING_DIR = `./`;
 
 export class BuildTask {
-    public static build(ngCliArgs: string[]): void {
+    public static build(ngCliArgs: string[] = []): void {
         const backuper = new Backuper();
 
         console.log("Do NOT cancel this task");
