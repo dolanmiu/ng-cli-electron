@@ -61,6 +61,10 @@ Add the following in your `scripts` section inside `package.json`:
 "serve-electron": "nge serve"
 ```
 
+### Help
+```
+nge --help
+```
 -----
 
 Made with 💖 by Dolan
