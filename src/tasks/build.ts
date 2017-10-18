@@ -6,7 +6,7 @@ const PACKAGE_NAME = "ng-cli-electron";
 const WORKING_DIR = `./`;
 
 export class BuildTask {
-    public static build(): void {
+    public static build(ngCliArgs: string[]): void {
         const backuper = new Backuper();
 
         console.log("Do NOT cancel this task");
@@ -20,7 +20,7 @@ export class BuildTask {
             this.setup.packageClenser();
 
             console.log("Ejecting...");
-            this.angularCli.eject();
+            this.angularCli.eject(ngCliArgs);
 
             console.log("Add webpack to electron...");
             this.setup.addElectronToWebpack();

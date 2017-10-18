@@ -5,7 +5,7 @@ export class AngularCLI {
     constructor(private workingDir: string) {
     }
 
-    public eject(): void {
+    public eject(ngCliArgs: string[]): void {
         shell.exec(`cd ${this.workingDir} && ng eject --base-href .`);
     }
 
