@@ -31,6 +31,29 @@ If you **only** want to build the `main` part of Electron:
 "build-electron-main": "nge build --main"
 ```
 
+#### Using `@angular/cli` build flags
+
+You can use a **subset** of the build flags [here](https://github.com/angular/angular-cli/wiki/build#options)
+
+More specifically:
+  * `aot`
+  * `app`
+  * `deploy-url`
+  * `environment`
+  * `extract-css`
+  * `force`
+  * `i18n-file`
+  * `i18n-format`
+  * `locale`
+  * `missing-translation`
+  * `output-hashing`
+  * `progress`
+  * `sourcemap`
+  * `target`
+  * `vendor-chunk`
+  * `common-chunk`
+  * `verbose`
+
 ### Serve
 Add the following in your `scripts` section inside `package.json`:
 
