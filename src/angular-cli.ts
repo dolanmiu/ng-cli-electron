@@ -19,6 +19,6 @@ export class AngularCLI {
     }
 
     public buildMain(): void {
-        shell.exec(`cd ${this.workingDir} && webpack --config webpack-main.config.js`);
+        shell.exec(`cd ${this.workingDir} && .\\node_modules\\.bin\\webpack --config webpack-main.config.js`);
     }
 }
