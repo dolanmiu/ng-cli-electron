@@ -33,7 +33,7 @@ export class SetUp {
         rimraf.sync(`${this.workingDir}/${file}`);
     }
 
-    public packageClenser(): void {
+    public removeScriptsFromPackage(): void {
         const packagePath = `${this.workingDir}/package.json`;
 
         const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf8"));

@@ -8,7 +8,7 @@ export const buildCommand: CommandModule = {
     describe: "Build the app",
     handler: (argv) => {
         if (argv.main === true) {
-            BuildTask.buildMain();
+            BuildTask.buildElectronMain();
             return;
         }
         const ngCliArgs = processArgs(argv);

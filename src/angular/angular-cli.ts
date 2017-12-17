@@ -8,18 +8,22 @@ export class AngularCLI {
 
     public eject(ngCliArgs: string[]): void {
         const ejectCommand = [`cd ${this.workingDir} && ng eject --base-href .`];
-        const fullCommand = ejectCommand.concat(ngCliArgs).join(" ");
+        const commandWithArgs = ejectCommand.concat(ngCliArgs).join(" ");
 
-        console.log(fullCommand);
+        console.log(commandWithArgs);
 
-        shell.exec(fullCommand);
+        shell.exec(commandWithArgs);
     }
 
     public build(): void {
-        shell.exec(`cd ${this.workingDir} && npm run build`);
+        const buildCommand = `cd ${this.workingDir} && npm run build`;
+
+        shell.exec(buildCommand);
     }
 
     public buildMain(): void {
-        shell.exec(`cd ${this.workingDir} && .\\node_modules\\.bin\\webpack --config webpack-main.config.js`);
+        const buildMainCommand = `cd ${this.workingDir} && .\\node_modules\\.bin\\webpack --config webpack-main.config.js`;
+
+        shell.exec(buildMainCommand);
     }
 }
