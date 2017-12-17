@@ -1,11 +1,12 @@
 import * as _ from "lodash";
 import * as shell from "shelljs";
 import * as Yargs from "yargs";
+import { CommandBuilder } from "yargs";
 
 import { buildCommand } from "./commands/build";
 import { serveCommand } from "./commands/serve";
 
-const cli = Yargs
+const cli: CommandBuilder = Yargs
 .command(serveCommand)
 .command(buildCommand)
 .option("main", {
