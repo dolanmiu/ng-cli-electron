@@ -49,7 +49,7 @@ export class SetUp {
         fs.writeFileSync(packagePath, JSON.stringify(packageJson));
     }
 
-    public checkIfMainExists(): boolean {
+    public mainExists(): boolean {
         if (fs.existsSync(`${this.workingDir}/main/index.ts`)) {
             return true;
         } else {

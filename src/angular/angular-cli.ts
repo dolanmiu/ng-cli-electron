@@ -3,6 +3,7 @@ import * as shell from "shelljs";
 export class AngularCLI {
 
     constructor(private workingDir: string) {
+
     }
 
     public eject(ngCliArgs: string[]): void {

@@ -1,4 +1,4 @@
-import { AngularCLI } from "../angular-cli";
+import { AngularCLI } from "../angular/angular-cli";
 import { Backuper } from "../backuper";
 import { SetUp } from "../setup";
 
@@ -52,7 +52,7 @@ export class BuildTask {
         console.log("Adding election main file...");
 
         try {
-            if (this.setup.checkIfMainExists()) {
+            if (this.setup.mainExists()) {
                 console.log("Custom 'main' exists, building it...");
                 this.setup.addMainWebpackToDist();
                 this.angularCli.buildMain();
