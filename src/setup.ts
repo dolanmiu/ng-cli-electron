@@ -33,7 +33,7 @@ export class SetUp {
         rimraf.sync(`${this.workingDir}/${file}`);
     }
 
-    public packageClenser(): void {
+    public removeScriptsFromPackage(): void {
         const packagePath = `${this.workingDir}/package.json`;
 
         const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf8"));
@@ -49,7 +49,7 @@ export class SetUp {
         fs.writeFileSync(packagePath, JSON.stringify(packageJson));
     }
 
-    public checkIfMainExists(): boolean {
+    public mainExists(): boolean {
         if (fs.existsSync(`${this.workingDir}/main/index.ts`)) {
             return true;
         } else {

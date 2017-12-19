@@ -33,7 +33,8 @@
     ],
     "no-string-literal": false,
     "no-console": [
-        false
-    ]
+      false
+    ],
+    "member-ordering": false
   }
 }
