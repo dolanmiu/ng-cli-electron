@@ -4,7 +4,8 @@ import { BuildTask } from "./build";
 
 export class ServeTask {
     public static serve(): void {
-        BuildTask.build();
+        BuildTask.buildRenderer();
+        BuildTask.buildElectronMain();
         shell.exec(`electron dist`);
     }
 }
