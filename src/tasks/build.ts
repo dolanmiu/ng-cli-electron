@@ -55,7 +55,7 @@ export class BuildTask {
         this.angularCli.build();
     }
 
-    private static addPackageJsonToDist(): void {
+    public static addPackageJsonToDist(): void {
         console.log("Copying package.json...");
         this.setup.copyPackageJson();
 

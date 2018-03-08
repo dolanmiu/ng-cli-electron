@@ -17,6 +17,11 @@ export const buildCommand: CommandModule = {
             return;
         }
 
+        if (argv.package) {
+            BuildTask.addPackageJsonToDist();
+            return;
+        }
+
         const ngCliArgs = processArgs(argv);
         BuildTask.buildRenderer(ngCliArgs);
         BuildTask.buildElectronMain();

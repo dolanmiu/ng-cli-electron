@@ -17,6 +17,10 @@ const cli: Yargs.CommandBuilder = Yargs
     alias: "r",
     default: false,
     describe: "Build the 'renderer' aka Angular part of Electron only",
+}).option("package", {
+    alias: "p",
+    default: false,
+    describe: "Build the 'package.json' for Electron only",
 }).option("aot", {
     describe: "Build using Ahead of Time compilation.",
 }).option("app", {
