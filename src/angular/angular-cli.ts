@@ -22,7 +22,7 @@ export class AngularCLI {
     }
 
     public buildMain(): void {
-        const buildMainCommand = `cd ${this.workingDir} && .\\node_modules\\.bin\\webpack --config webpack-main.config.js`;
+        const buildMainCommand = `cd ${this.workingDir} && webpack --config webpack-main.config.js`;
 
         shell.exec(buildMainCommand);
     }
