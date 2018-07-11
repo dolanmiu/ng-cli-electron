@@ -39,7 +39,7 @@ module.exports = {
     externals: nodeModules,
 
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
+        new webpack.optimize.SplitChunksPlugin({
             name: ['main']
         })
     ],
